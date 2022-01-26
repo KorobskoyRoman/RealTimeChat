@@ -1,0 +1,32 @@
+[
+    {
+        "username": "Bob",
+        "userImageString": "avatar",
+        "lastMessage": "Hello",
+        "id": 1
+    },
+    {
+        "username": "Van",
+        "userImageString": "avatar",
+        "lastMessage": "Hello",
+        "id": 2
+    },
+    {
+        "username": "Billy",
+        "userImageString": "avatar",
+        "lastMessage": "Hello",
+        "id": 3
+    },
+    {
+        "username": "John",
+        "userImageString": "avatar",
+        "lastMessage": "Hello",
+        "id": 4
+    },
+    {
+        "username": "Holo",
+        "userImageString": "avatar",
+        "lastMessage": "Hello",
+        "id": 5
+    }
+]

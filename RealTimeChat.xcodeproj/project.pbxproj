@@ -28,6 +28,9 @@
 		9C867F6927A05F0000614023 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C867F6827A05F0000614023 /* ListViewController.swift */; };
 		9C867F6D27A0623300614023 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C867F6C27A0623300614023 /* MainTabBarController.swift */; };
 		9C867F6F27A0626F00614023 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C867F6E27A0626F00614023 /* PeopleViewController.swift */; };
+		9CE719CB27A199960081A1E3 /* activeChats.json in Resources */ = {isa = PBXBuildFile; fileRef = 9CE719CA27A199960081A1E3 /* activeChats.json */; };
+		9CE719CE27A19A640081A1E3 /* BundleDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE719CD27A19A640081A1E3 /* BundleDecodable.swift */; };
+		9CE719D027A1A5A10081A1E3 /* waitingChats.json in Resources */ = {isa = PBXBuildFile; fileRef = 9CE719CF27A1A5A10081A1E3 /* waitingChats.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +57,9 @@
 		9C867F6827A05F0000614023 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		9C867F6C27A0623300614023 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		9C867F6E27A0626F00614023 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
+		9CE719CA27A199960081A1E3 /* activeChats.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activeChats.json; sourceTree = "<group>"; };
+		9CE719CD27A19A640081A1E3 /* BundleDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleDecodable.swift; sourceTree = "<group>"; };
+		9CE719CF27A1A5A10081A1E3 /* waitingChats.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = waitingChats.json; path = "../../../../../../Downloads/15. урок/IChat/Extensions/UIKIt/waitingChats.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,8 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				9C867F55279F0E0200614023 /* Support files */,
-				9C867F53279F0DE700614023 /* Extensions */,
 				9C867F60279F26FE00614023 /* Controllers */,
+				9C867F53279F0DE700614023 /* Extensions */,
 				9C867F61279F271600614023 /* Views */,
 				9C867F43279EFC5400614023 /* Info.plist */,
 			);
@@ -101,6 +107,7 @@
 				9C867F56279F0F2800614023 /* ButtonFormView.swift */,
 				9C867F5C279F190E00614023 /* OneLineTextField.swift */,
 				9C867F6427A04D8600614023 /* AddPhotoView.swift */,
+				9CE719CD27A19A640081A1E3 /* BundleDecodable.swift */,
 				9C867F54279F0DF000614023 /* UIKit */,
 			);
 			path = Extensions;
@@ -116,6 +123,8 @@
 				9C867F51279F062E00614023 /* UIImageView + Extension.swift */,
 				9C867F58279F142700614023 /* StackView + Extension.swift */,
 				9C867F6627A054B800614023 /* SegmentedControl + Extension.swift */,
+				9CE719CA27A199960081A1E3 /* activeChats.json */,
+				9CE719CF27A1A5A10081A1E3 /* waitingChats.json */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -218,8 +227,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CE719CB27A199960081A1E3 /* activeChats.json in Resources */,
 				9C867F42279EFC5400614023 /* LaunchScreen.storyboard in Resources */,
 				9C867F3F279EFC5400614023 /* Assets.xcassets in Resources */,
+				9CE719D027A1A5A10081A1E3 /* waitingChats.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +250,7 @@
 				9C867F3A279EFC5100614023 /* AuthViewController.swift in Sources */,
 				9C867F6327A04B2100614023 /* SetupProfileViewController.swift in Sources */,
 				9C867F50279F056400614023 /* UILabel + Extension.swift in Sources */,
+				9CE719CE27A19A640081A1E3 /* BundleDecodable.swift in Sources */,
 				9C867F57279F0F2800614023 /* ButtonFormView.swift in Sources */,
 				9C867F6527A04D8700614023 /* AddPhotoView.swift in Sources */,
 				9C867F36279EFC5100614023 /* AppDelegate.swift in Sources */,
