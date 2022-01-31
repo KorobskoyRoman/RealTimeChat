@@ -1,32 +1,32 @@
 [
     {
         "username": "Bob",
-        "userImageString": "avatar",
-        "lastMessage": "Hello",
+        "userImageString": "1",
+        "lastMessage": "Hello!",
         "id": 1
     },
     {
         "username": "Van",
-        "userImageString": "avatar",
-        "lastMessage": "Hello",
+        "userImageString": "2",
+        "lastMessage": "Hi!",
         "id": 2
     },
     {
         "username": "Billy",
-        "userImageString": "avatar",
-        "lastMessage": "Hello",
+        "userImageString": "3",
+        "lastMessage": "Let's shopping!",
         "id": 3
     },
     {
         "username": "John",
-        "userImageString": "avatar",
-        "lastMessage": "Hello",
+        "userImageString": "4",
+        "lastMessage": "Omg! Have u seen this?",
         "id": 4
     },
     {
         "username": "Holo",
-        "userImageString": "avatar",
-        "lastMessage": "Hello",
+        "userImageString": "5",
+        "lastMessage": "Attaching file [...]",
         "id": 5
     }
 ]
