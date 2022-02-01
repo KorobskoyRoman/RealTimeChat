@@ -13,7 +13,7 @@ extension UIColor {
         return #colorLiteral(red: 1, green: 0.1719351113, blue: 0.4505646229, alpha: 1)
     }
     
-    static func mainWhire() -> UIColor {
+    static func mainWhite() -> UIColor {
         return #colorLiteral(red: 0.9750153422, green: 0.9786756635, blue: 0.9938495755, alpha: 1)
     }
     
