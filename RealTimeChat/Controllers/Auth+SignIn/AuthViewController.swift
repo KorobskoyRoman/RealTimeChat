@@ -19,12 +19,42 @@ class AuthViewController: UIViewController {
     let emailButton = UIButton(title: "Email", titleColor: .white, backgroundColor: .mainBlack())
     let loginButton = UIButton(title: "Login", titleColor: .buttonRed(), backgroundColor: .white, isShadow: true)
     
+    let signUpVC = SignUpViewController()
+    let loginVC = LoginViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
         googleButton.customizeGoogleButton()
         setConstraints()
+        emailButton.addTarget(self, action: #selector(emailButtonTapped), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        
+        signUpVC.delegate = self
+        loginVC.delegate = self
+    }
+    
+    @objc private func emailButtonTapped() {
+        print(#function)
+        present(signUpVC, animated: true, completion: nil)
+    }
+    
+    @objc private func loginButtonTapped() {
+        print(#function)
+        present(loginVC, animated: true, completion: nil)
+    }
+}
+
+// MARK: - AuthNavigationDelegate
+
+extension AuthViewController: AuthNavigationDelegate {
+    func toLoginVC() {
+        present(loginVC, animated: true, completion: nil)
+    }
+    
+    func toSignUpVC() {
+        present(signUpVC, animated: true, completion: nil)
     }
 }
 

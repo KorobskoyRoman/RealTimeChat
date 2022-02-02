@@ -28,12 +28,37 @@ class SignUpViewController: UIViewController {
         button.titleLabel?.font = .avenir20()
         return button
     }()
+    weak var delegate: AuthNavigationDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .white
         setConstraints()
+        signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func signUpButtonTapped() {
+        print(#function)
+        AuthService.shared.register(email: emailTf.text,
+                                    password: passwordTf.text,
+                                    confirmPassword: confirmPasswordTf.text) { result in
+            switch result {
+            case .success(let user):
+                self.showAlert(title: "Succes!", message: "Register is complete!") {
+                    self.present(SetupProfileViewController(), animated: true, completion: nil)
+                }
+            case .failure(let error):
+                self.showAlert(title: "Error", message: "Register error! \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    @objc private func loginButtonTapped() {
+        self.dismiss(animated: true) {
+            self.delegate?.toLoginVC()
+        }
     }
 }
 
@@ -108,5 +133,16 @@ struct SignUpViewControllerProvider: PreviewProvider {
         func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
             
         }
+    }
+}
+
+extension UIViewController {
+    func showAlert(title: String, message: String, completion: @escaping () -> Void = { }) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            completion()
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
     }
 }
