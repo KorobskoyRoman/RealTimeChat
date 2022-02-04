@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import GoogleSignIn
+import FirebaseCore
+import FirebaseAuth
 
 class AuthViewController: UIViewController {
     
@@ -30,6 +33,7 @@ class AuthViewController: UIViewController {
         setConstraints()
         emailButton.addTarget(self, action: #selector(emailButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        googleButton.addTarget(self, action: #selector(googleButtonPressed), for: .touchUpInside)
         
         signUpVC.delegate = self
         loginVC.delegate = self
@@ -43,6 +47,32 @@ class AuthViewController: UIViewController {
     @objc private func loginButtonTapped() {
         print(#function)
         present(loginVC, animated: true, completion: nil)
+    }
+    
+    @objc private func googleButtonPressed() {
+        
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        // Create Google Sign In configuration object.
+        let config = GIDConfiguration(clientID: clientID)
+        
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { user, error in
+            
+            if let error = error {
+                print("auth error \(error)")
+                return
+            }
+            
+            guard
+                let authentication = user?.authentication,
+                let idToken = authentication.idToken
+            else {
+                return
+            }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
+        }
     }
 }
 

@@ -6,11 +6,9 @@
 //
 
 import UIKit
-
-protocol AuthNavigationDelegate: AnyObject {
-    func toLoginVC()
-    func toSignUpVC()
-}
+import GoogleSignIn
+import FirebaseAuth
+import Firebase
 
 class LoginViewController: UIViewController {
     
@@ -45,6 +43,7 @@ class LoginViewController: UIViewController {
         setConstraints()
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
+        googleButton.addTarget(self, action: #selector(googleButtonPressed), for: .touchUpInside)
     }
     
     @objc private func loginButtonTapped() {
@@ -52,7 +51,16 @@ class LoginViewController: UIViewController {
             switch result {
             case .success(let user):
                 self.showAlert(title: "Succes!", message: "U're in!") {
-                    self.present(SetupProfileViewController(), animated: true, completion: nil)
+                    FirestoreService.shared.getUserData(user: user) { result in
+                        switch result {
+                        case .success(let muser):
+                            let mainTabBar = MainTabBarController(currentUser: muser)
+                            mainTabBar.modalPresentationStyle = .fullScreen
+                            self.present(mainTabBar, animated: true, completion: nil)
+                        case .failure(_):
+                            self.present(SetupProfileViewController(currentUser: user), animated: true, completion: nil)
+                        }
+                    }
                 }
             case .failure(let error):
                 self.showAlert(title: "Error", message: "Auth error! \(error.localizedDescription)")
@@ -63,6 +71,32 @@ class LoginViewController: UIViewController {
     @objc private func signUpButtonTapped() {
         self.dismiss(animated: true) {
             self.delegate?.toSignUpVC()
+        }
+    }
+    
+    @objc private func googleButtonPressed() {
+        
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        // Create Google Sign In configuration object.
+        let config = GIDConfiguration(clientID: clientID)
+        
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { user, error in
+            
+            if let error = error {
+                print("auth error \(error)")
+                return
+            }
+            
+            guard
+                let authentication = user?.authentication,
+                let idToken = authentication.idToken
+            else {
+                return
+            }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
         }
     }
 }

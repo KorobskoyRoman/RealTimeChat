@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import GoogleSignIn
 
 class AuthService {
     
@@ -23,6 +24,24 @@ class AuthService {
         }
 
         auth.signIn(withEmail: email, password: password) { result, error in
+            guard let result = result else {
+                completion(.failure(error!))
+                return
+            }
+            completion(.success(result.user))
+            print("logined email: \(email), password: \(password)")
+        }
+    }
+    
+    func googleLogin(user: GIDGoogleUser!, error: Error!, completion: @escaping (Result<User, Error>) -> Void) {
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        let auth = user.authentication 
+        let credential = GoogleAuthProvider.credential(withIDToken: auth.idToken!, accessToken: auth.accessToken)
+        Auth.auth().signIn(with: credential) { result, error in
             guard let result = result else {
                 completion(.failure(error!))
                 return
@@ -54,6 +73,7 @@ class AuthService {
                 return
             }
             completion(.success(result.user))
+            print("succses register. login: \(email!), password: \(password!)")
         }
     }
 }

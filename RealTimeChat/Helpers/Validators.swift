@@ -9,6 +9,7 @@ import Foundation
 
 class Validators {
     
+    // для аутентификации
     static func isFilled(email: String?, password: String?, confirmPassword: String?) -> Bool {
         guard let confirmPassword = confirmPassword,
               let password = password,
@@ -16,6 +17,20 @@ class Validators {
               password != "",
               email != "",
               confirmPassword != ""
+        else {
+            return false
+        }
+        return true
+    }
+    
+    // для firestore
+    static func isFilled(username: String?, description: String?, sex: String?) -> Bool {
+        guard let sex = sex,
+              let description = description,
+              let username = username,
+              description != "",
+              username != "",
+              sex != ""
         else {
             return false
         }
