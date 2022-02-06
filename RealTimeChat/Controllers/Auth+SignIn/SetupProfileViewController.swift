@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import SDWebImage
 
 class SetupProfileViewController: UIViewController {
     
@@ -33,6 +34,10 @@ class SetupProfileViewController: UIViewController {
         if let username = currentUser.displayName {
             fullNameTf.text = username
         }
+        // для гугл авторизации
+        if let photoURL = currentUser.photoURL {
+            fullImageView.circleImageView.sd_setImage(with: photoURL, completed: nil)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -45,6 +50,15 @@ class SetupProfileViewController: UIViewController {
         view.backgroundColor = .white
         setConstraints()
         goToCharsButton.addTarget(self, action: #selector(goToChatsButtonTapped), for: .touchUpInside)
+        fullImageView.plusButton.addTarget(self, action: #selector(plusButtonTapped), for: .touchUpInside)
+        fullImageView.contentMode = .scaleAspectFill
+    }
+    
+    @objc private func plusButtonTapped() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = .photoLibrary
+        present(imagePickerController, animated: true, completion: nil)
     }
     
     @objc private func goToChatsButtonTapped() {
@@ -52,7 +66,7 @@ class SetupProfileViewController: UIViewController {
             id: currentUser.uid,
             email: currentUser.email!,
             username: fullNameTf.text,
-            avatarImage: "nil",
+            avatarImage: fullImageView.circleImageView.image,
             description: aboutmeTf.text,
             sex: sexSegmentedControl.titleForSegment(at: sexSegmentedControl.selectedSegmentIndex)) { result in
                 switch result {
@@ -65,8 +79,21 @@ class SetupProfileViewController: UIViewController {
                     print(muser)
                 case .failure(let error):
                     self.showAlert(title: "Error!", message: error.localizedDescription)
+                    //для понятия ошибки т.к. localizedDescription не дает определения
+                    print("\(error)")
                 }
             }
+    }
+}
+
+// UIImagePickerControllerDelegate
+
+extension SetupProfileViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else { return }
+        fullImageView.circleImageView.image = image
     }
 }
 

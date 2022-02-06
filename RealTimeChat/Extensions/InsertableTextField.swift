@@ -72,24 +72,24 @@ class InsertableTextField: UITextField {
 
 // MARK: - SwiftUI
 // Для отображения контроллера через Canvas
-
-import SwiftUI
-
-struct TextFieldProvider: PreviewProvider {
-    static var previews: some View {
-        ContainerView().edgesIgnoringSafeArea(.all).previewInterfaceOrientation(.portrait)
-    }
-    
-    struct ContainerView: UIViewControllerRepresentable {
-
-        let tabbarVC = ProfileViewController()
-        
-        func makeUIViewController(context: Context) -> ProfileViewController {
-            return tabbarVC
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-            
-        }
-    }
-}
+//
+//import SwiftUI
+//
+//struct TextFieldProvider: PreviewProvider {
+//    static var previews: some View {
+//        ContainerView().edgesIgnoringSafeArea(.all).previewInterfaceOrientation(.portrait)
+//    }
+//
+//    struct ContainerView: UIViewControllerRepresentable {
+//
+//        let tabbarVC = ProfileViewController()
+//
+//        func makeUIViewController(context: Context) -> ProfileViewController {
+//            return tabbarVC
+//        }
+//
+//        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+//
+//        }
+//    }
+//}
