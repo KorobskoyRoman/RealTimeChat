@@ -39,6 +39,7 @@
 		9C9EB98C27B0317E00D4F8F3 /* ListenerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB98B27B0317E00D4F8F3 /* ListenerService.swift */; };
 		9C9EB98E27B039F300D4F8F3 /* UIAplication + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB98D27B039F300D4F8F3 /* UIAplication + Extension.swift */; };
 		9C9EB99027B04CCE00D4F8F3 /* MMassage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB98F27B04CCE00D4F8F3 /* MMassage.swift */; };
+		9C9EB99227B05EC800D4F8F3 /* WaitingChatsNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C9EB99127B05EC800D4F8F3 /* WaitingChatsNavigation.swift */; };
 		9CE719CB27A199960081A1E3 /* activeChats.json in Resources */ = {isa = PBXBuildFile; fileRef = 9CE719CA27A199960081A1E3 /* activeChats.json */; };
 		9CE719CE27A19A640081A1E3 /* BundleDecodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE719CD27A19A640081A1E3 /* BundleDecodable.swift */; };
 		9CE719D327A81E470081A1E3 /* ActiveChatCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE719D227A81E470081A1E3 /* ActiveChatCell.swift */; };
@@ -95,6 +96,7 @@
 		9C9EB98B27B0317E00D4F8F3 /* ListenerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenerService.swift; sourceTree = "<group>"; };
 		9C9EB98D27B039F300D4F8F3 /* UIAplication + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAplication + Extension.swift"; sourceTree = "<group>"; };
 		9C9EB98F27B04CCE00D4F8F3 /* MMassage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MMassage.swift; sourceTree = "<group>"; };
+		9C9EB99127B05EC800D4F8F3 /* WaitingChatsNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingChatsNavigation.swift; sourceTree = "<group>"; };
 		9CE719CA27A199960081A1E3 /* activeChats.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activeChats.json; sourceTree = "<group>"; };
 		9CE719CD27A19A640081A1E3 /* BundleDecodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleDecodable.swift; sourceTree = "<group>"; };
 		9CE719D227A81E470081A1E3 /* ActiveChatCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatCell.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 			children = (
 				9CE719DA27A83EFE0081A1E3 /* SelfConfiguringCell.swift */,
 				9C9EB98127AD5A9400D4F8F3 /* AuthNavigationDelegate.swift */,
+				9C9EB99127B05EC800D4F8F3 /* WaitingChatsNavigation.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				9C867F4A279F007B00614023 /* UIButton + Extension.swift in Sources */,
 				9C9EB97B27AADFFC00D4F8F3 /* AuthService.swift in Sources */,
 				9C867F5F279F222C00614023 /* LoginViewController.swift in Sources */,
+				9C9EB99227B05EC800D4F8F3 /* WaitingChatsNavigation.swift in Sources */,
 				9C867F59279F142700614023 /* StackView + Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
