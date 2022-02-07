@@ -10,9 +10,10 @@ import FirebaseFirestore
 
 class ListViewController: UIViewController {
     
-    let activeChats = [MChat]()
+    var activeChats = [MChat]()
     var waitingChats = [MChat]()
     private var waitingChatsListener: ListenerRegistration?
+    private var activeChatsListener: ListenerRegistration?
     
     var collectionView: UICollectionView!
     
@@ -45,6 +46,7 @@ class ListViewController: UIViewController {
     
     deinit {
         waitingChatsListener?.remove()
+        activeChatsListener?.remove()
     }
     
     override func viewDidLoad() {
@@ -64,6 +66,16 @@ class ListViewController: UIViewController {
                     self.present(chatRequestVC, animated: true, completion: nil)
                 }
                 self.waitingChats = chats
+                self.reloadData()
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        })
+        
+        activeChatsListener = ListenerService.shared.activeChatsObserve(chats: activeChats, completion: { result in
+            switch result {
+            case .success(let chats):
+                self.activeChats = chats
                 self.reloadData()
             case .failure(let error):
                 self.showAlert(title: "Error", message: error.localizedDescription)
@@ -215,12 +227,16 @@ extension ListViewController: UICollectionViewDelegate {
             chatRequestVC.delegate = self
             present(chatRequestVC, animated: true, completion: nil)
         case .activeChats:
-            print(indexPath)
+            let chatsVC = ChatsViewController(user: currentUser, chat: chat)
+            navigationController?.pushViewController(chatsVC, animated: true)
         }
     }
 }
 
+// MARK: - WaitingChatsNavigation
+
 extension ListViewController: WaitingChatsNavigation {
+    
     func removeWaitingChat(chat: MChat) {
         FirestoreService.shared.deleteWaitingChat(chat: chat) { result in
             switch result {
@@ -232,11 +248,16 @@ extension ListViewController: WaitingChatsNavigation {
         }
     }
     
-    func chatToActive(chat: MChat) {
-        print(#function)
+    func changeToActive(chat: MChat) {
+        FirestoreService.shared.changeToActive(chat: chat) { result in
+            switch result {
+            case .success():
+                self.showAlert(title: "Success!", message: "U're allow to message \(chat.friendUsername)!")
+            case .failure(let error):
+                self.showAlert(title: "Error", message: error.localizedDescription)
+            }
+        }
     }
-    
-    
 }
 
 // MARK: - UISearchBarDelegate

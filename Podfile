@@ -12,5 +12,5 @@ target 'RealTimeChat' do
   pod 'GoogleSignIn'
   pod 'Firebase/Storage'
   pod 'SDWebImage'
-
+  pod 'MessageKit'
 end

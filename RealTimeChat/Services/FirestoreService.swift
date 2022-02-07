@@ -9,20 +9,25 @@ import Firebase
 import FirebaseFirestore
 
 class FirestoreService {
-    
+
     static let shared = FirestoreService()
-    
+
     let db = Firestore.firestore()
-    
+
     private var usersRef: CollectionReference {
         return db.collection("users") //ссылка на нашу коллекцию из БД
     }
-    
+
     private var waitingChatsRef: CollectionReference {
         return db.collection(["users", currentUser.id, "waitingChats"].joined(separator: "/"))
     }
+
+    private var activeChatsRef: CollectionReference {
+        return db.collection(["users", currentUser.id, "activeChats"].joined(separator: "/"))
+    }
+
     var currentUser: MUser!
-    
+
     func getUserData(user: User, completion: @escaping (Result<MUser, Error>) -> Void) {
         let docRef = usersRef.document(user.uid)
         docRef.getDocument { document, error in
@@ -38,19 +43,20 @@ class FirestoreService {
             }
         }
     }
-    
-    func saveProfileWith(id: String, email: String, username: String?, avatarImage: UIImage?, description: String?, sex: String?, completion: @escaping (Result<MUser, Error>) -> Void) {
-        
+
+    func saveProfileWith(id: String, email: String, username: String?, avatarImage: UIImage?, description: String?, sex: String?,
+                         completion: @escaping (Result<MUser, Error>) -> Void) {
+
         guard Validators.isFilled(username: username, description: description, sex: sex) else {
             completion(.failure(UserError.notFilled))
             return
         }
-        
+
         guard avatarImage != #imageLiteral(resourceName: "avatar") else {
             completion(.failure(UserError.photoNotExist))
             return
         }
-        
+
         var muser = MUser(username: username!,
                           email: email,
                           userImageString: "not exist",
@@ -59,7 +65,7 @@ class FirestoreService {
                           id: id)
         StorageService.shared.upload(photo: avatarImage!) { (result) in
             switch result {
-                
+
             case .success(let url):
                 muser.userImageString = url.absoluteString
                 self.usersRef.document(muser.id).setData(muser.representation) { (error) in
@@ -74,18 +80,18 @@ class FirestoreService {
             }
         }
     }
-    
+
     func createWaitingChat(message: String, receiver: MUser, completion: @escaping (Result<Void, Error>) -> Void) {
         // создаем ссылки на документы в БД
         let reference = db.collection(["users", receiver.id, "waitingChats"].joined(separator: "/"))
         let messageRef = reference.document(self.currentUser.id).collection("messages")
-        
-        let message = MMassage(user: currentUser, content: message)
+
+        let message = MMessage(user: currentUser, content: message)
         let chat = MChat(friendUsername: currentUser.username,
                          friendImageString: currentUser.userImageString,
                          lastMessageContent: message.content,
                          friendId: currentUser.id)
-        
+
         // создаем новый документ с id пользователя
         reference.document(currentUser.id).setData(chat.representation) { error in
             if let error = error {
@@ -101,26 +107,27 @@ class FirestoreService {
             }
         }
     }
+
     func deleteWaitingChat(chat: MChat, completion: @escaping (Result<Void, Error>) -> Void) {
         waitingChatsRef.document(chat.friendId).delete { error in
             if let error = error {
                 completion(.failure(error))
                 return
             }
-            completion(.success(Void()))
+//            completion(.success(Void()))
             self.deleteMessages(chat: chat, completion: completion)
         }
     }
-     
+
     func deleteMessages(chat: MChat, completion: @escaping (Result<Void, Error>) -> Void) {
-        let referece = waitingChatsRef.document(chat.friendId).collection("messages")
-        
+        let reference = waitingChatsRef.document(chat.friendId).collection("messages")
+
         getWaitingChatMessages(chat: chat) { result in
             switch result {
             case .success(let messages):
                 for message in messages {
                     guard let documentId = message.id else { return }
-                    let messageRef = referece.document(documentId)
+                    let messageRef = reference.document(documentId)
                     messageRef.delete { error in
                         if let error = error {
                             completion(.failure(error))
@@ -134,20 +141,69 @@ class FirestoreService {
             }
         }
     }
-    
-    func getWaitingChatMessages(chat: MChat, completion: @escaping (Result<[MMassage], Error>) -> Void) {
-        let referece = waitingChatsRef.document(chat.friendId).collection("messages")
-        var messages = [MMassage]()
-        referece.getDocuments { querySnapshot, error in
+
+    func getWaitingChatMessages(chat: MChat, completion: @escaping (Result<[MMessage], Error>) -> Void) {
+        let reference = waitingChatsRef.document(chat.friendId).collection("messages")
+        var messages = [MMessage]()
+        reference.getDocuments { querySnapshot, error in
             if let error = error {
                 completion(.failure(error))
                 return
             }
             for document in querySnapshot!.documents {
-                guard let message = MMassage(document: document) else { return }
+                guard let message = MMessage(document: document) else { return }
                 messages.append(message)
             }
             completion(.success(messages))
+        }
+    }
+
+    func changeToActive(chat: MChat, completion: @escaping (Result<Void, Error>) -> Void) {
+        getWaitingChatMessages(chat: chat) { result in
+            switch result {
+            case .success(let messages):
+                self.deleteWaitingChat(chat: chat) { result in
+                    switch result {
+                    case .success:
+                        self.createActiveChat(chat: chat, messages: messages) { result in
+                            switch result {
+                            case .success:
+                                completion(.success(Void()))
+                            case .failure(let error):
+                                completion(.failure(error))
+                                print("cant delete waiting chats: \(error)")
+                            }
+                        }
+                    case .failure(let error):
+                        completion(.failure(error))
+                        print("Ошибка при создании чата: \(error.localizedDescription)")
+                    }
+                }
+            case .failure(let error):
+                completion(.failure(error))
+                print("Ошибка при удалении чата: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func createActiveChat(chat: MChat, messages: [MMessage], completion: @escaping (Result<Void, Error>) -> Void) {
+        let messageRef = activeChatsRef.document(chat.friendId).collection("messages")
+        activeChatsRef.document(chat.friendId).setData(chat.representation) { error in
+            if let error = error {
+                completion(.failure(error))
+                print("error with create active chat: \(error)")
+                return
+            }
+            for message in messages {
+                messageRef.addDocument(data: message.representation) { error in
+                    if let error = error {
+                        completion(.failure(error))
+                        print("error with add document: \(error)")
+                        return
+                    }
+                    completion(.success(Void()))
+                }
+            }
         }
     }
 }

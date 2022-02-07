@@ -48,7 +48,8 @@ class ChatRequestViewController: UIViewController {
     
     @objc private func acceptButtonTapped() {
         self.dismiss(animated: true) {
-            self.delegate?.chatToActive(chat: self.chat)
+            self.delegate?.changeToActive(chat: self.chat)
+            print("dismiss controller")
         }
     }
     
